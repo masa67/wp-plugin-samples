@@ -18,9 +18,16 @@ add_action('admin_menu', 'stages_plugin_menu');
 add_action('save_post', 'stages_save_metabox');
 add_action('widgets_init', 'stages_widget_init');
 add_action('wp', 'stages_init');
+add_action('wp_ajax_stages_add_wishlist', 'stages_add_wishlist_process');
+// if not logged in, use this: add_action('wp_ajax_nopriv_myajax-submit', 'myajax_submit');
 
 function stages_add_metabox() {
     add_meta_box('stages_youtube', 'YouTube Video Link', 'stages_youtube_handler', 'post');
+}
+
+function stages_add_wishlist_process() {
+    echo 'hello back';
+    exit();
 }
 
 function stages_admin_init() {
@@ -148,10 +155,9 @@ class Stages_Widget extends WP_Widget {
                 .'"></iframe>';
 
 
-            echo '<span id="stages_add_wishlist_div"><a id="stages_add_wishlist" href="">Add to wishlist</a></span>';
+            echo '<span id="stages_add_wishlist"><a id="stages_add_wishlist" href="">Add to wishlist</a></span>';
             echo $after_widget;
         }
-
     }
 }
 
