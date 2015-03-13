@@ -26,7 +26,7 @@ function stages_add_metabox() {
 }
 
 function stages_add_wishlist_process() {
-    echo 'hello back';
+    echo 'hello back from post id:'.$_POST['postId'];
     exit();
 }
 
@@ -41,6 +41,12 @@ function stages_init() {
 
     wp_enqueue_script('jquery');
     wp_enqueue_script('stageswishlist-js');
+
+    global $post;
+    wp_localize_script('stageswishlist-js', 'MyAjax', array(
+        'action' => 'stages_add_wishlist',
+        'postId' => $post->ID
+    ));
 }
 
 function stages_plugin_menu() {

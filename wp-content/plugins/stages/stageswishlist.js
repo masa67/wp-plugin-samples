@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
                '//' +
                document.location.host +
                '/wp/wp-admin/admin-ajax.php',
-            { action: 'stages_add_wishlist', postId: 100 },
+            MyAjax,
             function(resp) {
                 console.log(resp);
                 alert(resp);
