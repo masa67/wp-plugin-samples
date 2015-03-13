@@ -1,0 +1,10 @@
+/*
+Theme Name: Level Up Child
+Theme URI: http://localhost/wp/
+Description: This is a child theme of 2014
+Author: Scott Tolinski
+Author URI: http://scotttolinski.com
+Template: twentyfourteen
+Version: 0.1
+*/
+@import url("../twentyfourteen/style.css");
