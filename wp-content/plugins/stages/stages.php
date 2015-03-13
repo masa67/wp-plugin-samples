@@ -72,10 +72,32 @@ class Stages_Widget extends WP_Widget {
     }
 
     function update($new_instance, $old_instance) {
+        $instance = $old_instance;
+        $instance['title'] = strip_tags($new_instance['title']);
+        return $instance;
 
     }
 
     function widget($args, $instance) {
+        extract($args);
+        $title = apply_filters('widget_title', $instance['title']);
+        if (is_single()) {
+            echo $before_widget;
+            echo $before_title.$title.$after_title;
+
+            $stages_youtube = get_post_meta(get_the_ID(), 'stages_youtube', true);
+
+            echo '<iframe width="200" height="200" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/'
+                .get_yt_videoid($stages_youtube)
+                .'"></iframe>';
+
+            echo $after_widget;
+        }
 
     }
+}
+
+function get_yt_videoid($url) {
+    parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+    return $my_array_of_vars['v'];
 }
