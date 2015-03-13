@@ -59,7 +59,16 @@ class Stages_Widget extends WP_Widget {
     }
 
     function form($instance) {
+        $defaults = array('title' => 'Video');
+        $instance = wp_parse_args( (array) $instance, $defaults);
 
+        $title = esc_attr($instance['title']);
+
+        echo '<p>Title <input type="text" class="widefat" name="'
+            .$this->get_field_name('title')
+            .'" value="'
+            .$title
+            .'" /></p>';
     }
 
     function update($new_instance, $old_instance) {
