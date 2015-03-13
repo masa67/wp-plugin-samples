@@ -14,6 +14,8 @@
 
 add_action('add_meta_boxes', 'stages_add_metabox');
 
+add_action('save_post', 'stages_save_metabox');
+
 add_action('widgets_init', 'stages_widget_init');
 
 function stages_widget_init() {
@@ -24,10 +26,24 @@ function stages_add_metabox() {
     add_meta_box('stages_youtube', 'YouTube Video Link', 'stages_youtube_handler', 'post');
 }
 
+function stages_save_metabox($post_id) {
+    if (defined( 'DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post')) {
+        return;
+    }
+
+    if (isset($_POST['stages_youtube'])) {
+        update_post_meta($post_id, 'stages_youtube', esc_url($_POST['stages_youtube']));
+    }
+}
+
 function stages_youtube_handler() {
     $value = get_post_custom($post->ID);
     $youtube_link = $value['stages_youtube'][0];
-    $youtube_link = esc_attr($value['stages_youtube'][0]);
+    $youtube_link = esc_attr( $value['stages_youtube'][0] );
     echo '<label for="stages_youtube">YouTube Video Link</label><input type="text" id="stages_youtube" name="stages_youtube" value="'.$youtube_link.'" />';
 }
 
