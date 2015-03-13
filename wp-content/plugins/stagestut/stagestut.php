@@ -4,7 +4,7 @@
  * @version 1.0
  */
 /*
- * Plugin Name: Stages
+ * Plugin Name: Stagestut
  * Plugin URI: http://www.deveteam.com
  * Description: 100% Web based solution for real time and efficient online sales, customer service, field service and training.
  * Version: 1.0
@@ -12,30 +12,30 @@
  * Author URI: http://www.deveteam.com
  */
 
-add_action('add_meta_boxes', 'stages_add_metabox');
-add_action('admin_init', 'stages_admin_init');
-add_action('admin_menu', 'stages_plugin_menu');
-add_action('save_post', 'stages_save_metabox');
-add_action('widgets_init', 'stages_widget_init');
-add_action('wp', 'stages_init');
-add_action('wp_ajax_stages_add_wishlist', 'stages_add_wishlist_process');
+add_action('add_meta_boxes', 'stagestut_add_metabox');
+add_action('admin_init', 'stagestut_admin_init');
+add_action('admin_menu', 'stagestut_plugin_menu');
+add_action('save_post', 'stagestut_save_metabox');
+add_action('widgets_init', 'stagestut_widget_init');
+add_action('wp', 'stagestut_init');
+add_action('wp_ajax_stagestut_add_wishlist', 'stagestut_add_wishlist_process');
 // if not logged in, use this: add_action('wp_ajax_nopriv_myajax-submit', 'myajax_submit');
 
-function stages_add_metabox() {
-    add_meta_box('stages_youtube', 'YouTube Video Link', 'stages_youtube_handler', 'post');
+function stagestut_add_metabox() {
+    add_meta_box('stagestut_youtube', 'YouTube Video Link', 'stagestut_youtube_handler', 'post');
 }
 
-function stages_add_wishlist_process() {
+function stagestut_add_wishlist_process() {
     echo 'hello back from post id:'.$_POST['postId'];
     exit();
 }
 
-function stages_admin_init() {
-    register_setting('stages-group', stages_dashboard_title);
-    register_setting('stages-group', stages_number_of_items);
+function stagestut_admin_init() {
+    register_setting('stages-group', stagestut_dashboard_title);
+    register_setting('stages-group', stagestut_number_of_items);
 }
 
-function stages_init() {
+function stagestut_init() {
     wp_register_script('stageswishlist-js', plugins_url('/stageswishlist.js', __FILE__),
         array('jquery'));
 
@@ -44,21 +44,21 @@ function stages_init() {
 
     global $post;
     wp_localize_script('stageswishlist-js', 'MyAjax', array(
-        'action' => 'stages_add_wishlist',
+        'action' => 'stagestut_add_wishlist',
         'postId' => $post->ID
     ));
 }
 
-function stages_plugin_menu() {
+function stagestut_plugin_menu() {
     add_options_page(
-        'Stages Wishlist Options',
-        'Stages Wishlist',
+        'Stagestut Wishlist Options',
+        'Stagestut Wishlist',
         'manage_options',
-        'stages',
-        'stages_plugin_options');
+        'stagestut',
+        'stagestut_plugin_options');
 }
 
-function stages_plugin_options() {
+function stagestut_plugin_options() {
     ?>
     <div class="wrap">
         <h2>Stages Wishlist</h2>
@@ -67,22 +67,22 @@ function stages_plugin_options() {
             <?php @do_settings_fields('stages-group'); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row"><label for="stages_dashboard_title">Dashboard widget title</label></th>
+                    <th scope="row"><label for="stagestut_dashboard_title">Dashboard widget title</label></th>
                     <td>
                         <input type="text"
-                               name="stages_dashboard_title"
-                               id="stages_dashboard_title"
-                               value="<?php echo get_option('stages_dashboard_title'); ?>" />
+                               name="stagestut_dashboard_title"
+                               id="stagestut_dashboard_title"
+                               value="<?php echo get_option('stagestut_dashboard_title'); ?>" />
                         <br /><small>help text for this field</small>
                     </td>
                 </tr>
                 <tr valign="top">
-                    <th scope="row"><label for="stages_number_of_items">Number of items to show</label></th>
+                    <th scope="row"><label for="stagestut_number_of_items">Number of items to show</label></th>
                     <td>
                         <input type="text"
-                               name="stages_number_of_items"
-                               id="stages_number_of_items"
-                               value="<?php echo get_option('stages_number_of_items'); ?>" />
+                               name="stagestut_number_of_items"
+                               id="stagestut_number_of_items"
+                               value="<?php echo get_option('stagestut_number_of_items'); ?>" />
                         <br/><small>help text for this field</small>
                     </td>
                 </tr>
@@ -92,7 +92,7 @@ function stages_plugin_options() {
     <?php
 }
 
-function stages_save_metabox($post_id) {
+function stagestut_save_metabox($post_id) {
     if (defined( 'DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
@@ -101,24 +101,24 @@ function stages_save_metabox($post_id) {
         return;
     }
 
-    if (isset($_POST['stages_youtube'])) {
-        update_post_meta($post_id, 'stages_youtube', esc_url($_POST['stages_youtube']));
+    if (isset($_POST['stagestut_youtube'])) {
+        update_post_meta($post_id, 'stagestut_youtube', esc_url($_POST['stagestut_youtube']));
     }
 }
 
-function stages_widget_init() {
-    register_widget(Stages_Widget);
+function stagestut_widget_init() {
+    register_widget(Stagestut_Widget);
 }
 
-function stages_youtube_handler() {
+function stagestut_youtube_handler() {
     $value = get_post_custom($post->ID);
-    $youtube_link = $value['stages_youtube'][0];
-    $youtube_link = esc_attr( $value['stages_youtube'][0] );
-    echo '<label for="stages_youtube">YouTube Video Link</label><input type="text" id="stages_youtube" name="stages_youtube" value="'.$youtube_link.'" />';
+    $youtube_link = $value['stagestut_youtube'][0];
+    $youtube_link = esc_attr( $value['stagestut_youtube'][0] );
+    echo '<label for="stagestut_youtube">YouTube Video Link</label><input type="text" id="stagestut_youtube" name="stagestut_youtube" value="'.$youtube_link.'" />';
 }
 
-class Stages_Widget extends WP_Widget {
-    function Stages_Widget() {
+class Stagestut_Widget extends WP_Widget {
+    function stagestut_Widget() {
         $widget_options = array(
             'classname' => 'stages-class',
             'description' => 'Show a YouTube video from post metadata'
@@ -157,16 +157,16 @@ class Stages_Widget extends WP_Widget {
                 echo 'Please sign in to use this widget';
             } else {
                 /*
-                $stages_youtube = get_post_meta(get_the_ID(), 'stages_youtube', true);
+                $stagestut_youtube = get_post_meta(get_the_ID(), 'stagestut_youtube', true);
                 */
                 echo '<iframe width="200" height="200" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/'
-                    . get_yt_videoid($stages_youtube)
+                    . get_yt_videoid($stagestut_youtube)
                     . '"></iframe>';
 
 
-                echo '<span id="stages_add_wishlist_div"><a id="stages_add_wishlist" href="">Add to wishlist</a></span>';
+                echo '<span id="stagestut_add_wishlist_div"><a id="stagestut_add_wishlist" href="">Add to wishlist</a></span>';
             }
-            
+
             echo $after_widget;
         }
     }
