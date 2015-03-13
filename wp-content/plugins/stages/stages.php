@@ -153,15 +153,20 @@ class Stages_Widget extends WP_Widget {
             echo $before_widget;
             echo $before_title.$title.$after_title;
 
-            /*
-            $stages_youtube = get_post_meta(get_the_ID(), 'stages_youtube', true);
-            */
-            echo '<iframe width="200" height="200" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/'
-                .get_yt_videoid($stages_youtube)
-                .'"></iframe>';
+            if (!is_user_logged_in()) {
+                echo 'Please sign in to use this widget';
+            } else {
+                /*
+                $stages_youtube = get_post_meta(get_the_ID(), 'stages_youtube', true);
+                */
+                echo '<iframe width="200" height="200" frameborder="0" allowfullscreen src="http://www.youtube.com/embed/'
+                    . get_yt_videoid($stages_youtube)
+                    . '"></iframe>';
 
 
-            echo '<span id="stages_add_wishlist"><a id="stages_add_wishlist" href="">Add to wishlist</a></span>';
+                echo '<span id="stages_add_wishlist_div"><a id="stages_add_wishlist" href="">Add to wishlist</a></span>';
+            }
+            
             echo $after_widget;
         }
     }
