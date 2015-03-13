@@ -13,17 +13,61 @@
  */
 
 add_action('add_meta_boxes', 'stages_add_metabox');
-
+add_action('admin_init', 'stages_admin_init');
+add_action('admin_menu', 'stages_plugin_menu');
 add_action('save_post', 'stages_save_metabox');
-
 add_action('widgets_init', 'stages_widget_init');
-
-function stages_widget_init() {
-    register_widget(Stages_Widget);
-}
 
 function stages_add_metabox() {
     add_meta_box('stages_youtube', 'YouTube Video Link', 'stages_youtube_handler', 'post');
+}
+
+function stages_admin_init() {
+    register_setting('stages-group', stages_dashboard_title);
+    register_setting('stages-group', stages_number_of_items);
+}
+
+function stages_plugin_menu() {
+    add_options_page(
+        'Stages Wishlist Options',
+        'Stages Wishlist',
+        'manage_options',
+        'stages',
+        'stages_plugin_options');
+}
+
+function stages_plugin_options() {
+    ?>
+    <div class="wrap">
+        <h2>Stages Wishlist</h2>
+        <form action="options.php" method="post">
+            <?php settings_fields('stages-group'); ?>
+            <?php @do_settings_fields('stages-group'); ?>
+            <table class="form-table">
+                <tr valign="top">
+                    <th scope="row"><label for="stages_dashboard_title">Dashboard widget title</label></th>
+                    <td>
+                        <input type="text"
+                               name="stages_dashboard_title"
+                               id="stages_dashboard_title"
+                               value="<?php echo get_option('stages_dashboard_title'); ?>" />
+                        <br /><small>help text for this field</small>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row"><label for="stages_number_of_items">Number of items to show</label></th>
+                    <td>
+                        <input type="text"
+                               name="stages_number_of_items"
+                               id="stages_number_of_items"
+                               value="<?php echo get_option('stages_number_of_items'); ?>" />
+                        <br/><small>help text for this field</small>
+                    </td>
+                </tr>
+            </table> <?php @submit_button(); ?>
+        </form>
+    </div>
+    <?php
 }
 
 function stages_save_metabox($post_id) {
@@ -38,6 +82,10 @@ function stages_save_metabox($post_id) {
     if (isset($_POST['stages_youtube'])) {
         update_post_meta($post_id, 'stages_youtube', esc_url($_POST['stages_youtube']));
     }
+}
+
+function stages_widget_init() {
+    register_widget(Stages_Widget);
 }
 
 function stages_youtube_handler() {
